@@ -1,6 +1,6 @@
 const databaseConfig = {
   development: {
-    url: process.env.DATABASE_URL,
+    url: 'postgres://postgres:postgres@localhost:5432/photopost',
     dialect: 'postgres',
     logging: console.log,
   },
