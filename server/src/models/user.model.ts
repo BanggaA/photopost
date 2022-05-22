@@ -1,5 +1,6 @@
 import { CreationOptional, DataTypes, Model, Sequelize } from 'sequelize';
 import { Models } from '.';
+import { hashPassword } from '../utils/bcrypt.helper';
 
 export class User extends Model {
   // id can be undefined during creation when using `autoIncrement`
@@ -71,6 +72,12 @@ export const userModel = (sequelize: Sequelize, DT: typeof DataTypes) => {
       modelName: 'user',
       underscored: true,
       defaultScope: { attributes: { exclude: ['password'] } },
+      hooks: {
+        beforeCreate: async (doc) => {
+          doc.password = await hashPassword(doc.password);
+          return;
+        },
+      },
     },
   );
 

@@ -1,7 +1,7 @@
 import { ErrorRequestHandler, Router } from 'express';
 import createHttpError from 'http-errors';
 import { authRoutes } from './routes/auth.routes';
-import userRoutes from './routes/user.routes';
+import { userRoutes } from './routes/user.routes';
 
 const routerApi = Router();
 

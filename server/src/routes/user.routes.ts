@@ -1,10 +1,8 @@
 import { Router } from 'express';
+import userController from '../controllers/user.controller';
+import { authMw } from '../middlewares/auth.middleware';
 
-const userRoutes = Router();
+export const userRoutes = Router();
 
-/* GET users listing. */
-userRoutes.get('/', function (req, res, next) {
-  res.json({ msg: 'success' });
-});
-
-export default userRoutes;
+userRoutes.get('/me', authMw, userController.getMyProfile);
+userRoutes.get('/:userId', userController.getProfileId);

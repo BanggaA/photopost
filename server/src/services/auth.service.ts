@@ -1,6 +1,8 @@
 import createHttpError from 'http-errors';
 import { LoginUserDTO, RegisterUserDTO, RegisterUserResponse } from '../dtos/auth.dto';
 import { db } from '../models';
+import { comparePassword } from '../utils/bcrypt.helper';
+import { createToken } from '../utils/jwt.helper';
 
 export class AuthService {
   constructor(private readonly database: typeof db) {}
@@ -15,18 +17,31 @@ export class AuthService {
   }
 
   async register(registerUserDTO: RegisterUserDTO): Promise<RegisterUserResponse> {
-    const user = {
-      id: 1,
-      email: 'lorem.ipsum@example.com',
-      name: 'Lorem Ipsum',
-      password: 'hesoyam',
-      birthdate: null,
-    };
+    const { name, email, password, birthdate } = registerUserDTO;
+    await this.findEmail(email);
+    const user = await this.database.User.create({
+      name,
+      email,
+      password,
+      birthdate,
+    });
     return user;
   }
 
   async login(loginDTO: LoginUserDTO) {
-    const token = Math.random().toString().slice(2);
+    const { email, password } = loginDTO;
+    const user = await this.database.User.findOne({
+      where: { email },
+      attributes: { include: ['password'] },
+    });
+    if (!user) throw this.loginError();
+
+    const passwordMatched = await comparePassword(password, user.password);
+    console.log(user.password, password);
+
+    if (!passwordMatched) throw this.loginError();
+
+    const token = createToken(user);
     return token;
   }
 }
