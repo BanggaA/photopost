@@ -22,7 +22,9 @@ export class User extends Model {
    * The `models/index` file will call this method automatically.
    */
   static associate(models: Models) {
-    // define association here
+    this.hasMany(models.Post, {
+      foreignKey: 'authorId',
+    });
   }
 }
 

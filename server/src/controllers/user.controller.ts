@@ -1,5 +1,5 @@
 import expressAsyncHandler from 'express-async-handler';
-import userServices, { UserService } from '../services/user.services';
+import userService, { UserService } from '../services/user.service';
 type UserControllerId = { userId: string };
 
 export class UserController {
@@ -15,4 +15,4 @@ export class UserController {
     res.status(200).json(profileId);
   });
 }
-export default new UserController(userServices);
+export default new UserController(userService);

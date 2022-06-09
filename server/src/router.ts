@@ -1,12 +1,14 @@
 import { ErrorRequestHandler, Router } from 'express';
 import createHttpError from 'http-errors';
 import { authRoutes } from './routes/auth.routes';
+import { postRoutes } from './routes/post.routes';
 import { userRoutes } from './routes/user.routes';
 
 const routerApi = Router();
 
 routerApi.use('/', authRoutes);
 routerApi.use('/v1/users', userRoutes);
+routerApi.use('/v1/posts', postRoutes);
 
 // catch 404 and forward to error handler
 routerApi.use(async (req, res, next) => {
